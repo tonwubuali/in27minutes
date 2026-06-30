@@ -74,7 +74,7 @@ export default function App() {
 function Shell({ children, right, onLogoClick }) {
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-30 border-b border-brand-line bg-white/90 backdrop-blur">
+      <header className="glass sticky top-0 z-40 border-b border-brand-line/70">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           <button onClick={onLogoClick} className="cursor-pointer">
             <Logo />
