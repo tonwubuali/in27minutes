@@ -58,14 +58,14 @@ export function Badge({ children, tone = "ink", className = "" }) {
 
 export function Button({ children, variant = "primary", className = "", ...props }) {
   const variants = {
-    primary: "bg-brand-orange hover:bg-brand-orangeDark text-white shadow-sm shadow-brand-orange/30",
-    dark: "bg-brand-ink hover:bg-brand-ink2 text-white",
+    primary: "bg-brand-orange hover:bg-brand-orangeDark text-white shadow-pop",
+    dark: "bg-brand-ink hover:bg-brand-ink2 text-white shadow-lift",
     ghost: "bg-transparent hover:bg-brand-ink/5 text-brand-ink",
-    outline: "border border-brand-line hover:border-brand-ink/40 bg-white text-brand-ink",
+    outline: "border border-brand-line hover:border-brand-ink/30 bg-white text-brand-ink shadow-soft",
   };
   return (
     <button
-      className={`press inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${variants[variant]} ${className}`}
+      className={`press inline-flex min-h-[44px] items-center justify-center gap-2 rounded-2xl px-5 py-3 text-[15px] font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed ${variants[variant]} ${className}`}
       {...props}
     >
       {children}
@@ -75,8 +75,23 @@ export function Button({ children, variant = "primary", className = "", ...props
 
 export function Card({ children, className = "", hover = false, style }) {
   return (
-    <div style={style} className={`rounded-2xl border border-brand-line bg-white ${hover ? "lift" : ""} ${className}`}>
+    <div style={style} className={`rounded-2xl bg-white shadow-soft ring-1 ring-brand-line/70 ${hover ? "lift hover:shadow-card" : ""} ${className}`}>
       {children}
+    </div>
+  );
+}
+
+// iOS-style bottom sheet for focused mobile flows.
+export function Sheet({ open, onClose, children, title }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+      <div className="absolute inset-0 animate-fade-in bg-brand-ink/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative z-10 w-full max-w-md animate-sheet-up rounded-t-3xl bg-white p-5 shadow-float safe-b sm:rounded-3xl">
+        <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-brand-line sm:hidden" />
+        {title && <h3 className="mb-3 text-lg font-extrabold">{title}</h3>}
+        {children}
+      </div>
     </div>
   );
 }
@@ -92,7 +107,7 @@ export function Field({ label, children, hint }) {
 }
 
 export const inputClass =
-  "w-full rounded-xl border border-brand-line bg-white px-3.5 py-2.5 text-sm outline-none transition focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20";
+  "w-full rounded-2xl border border-brand-line bg-white px-4 py-3 text-[15px] outline-none transition focus:border-brand-orange focus:ring-4 focus:ring-brand-orange/15";
 
 export function Skeleton({ className = "" }) {
   return <div className={`skeleton rounded-xl ${className}`} />;
