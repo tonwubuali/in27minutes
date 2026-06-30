@@ -20,8 +20,10 @@ export default withApi(
     const idx = ORDER_STAGES.indexOf(order.stage);
     const next = ORDER_STAGES[Math.min(idx + 1, ORDER_STAGES.length - 1)];
     const agentId = order.agent_id || auth.agentId || null;
+    // Stamp delivery time so cashback (missed 27-min promise) can be computed.
+    const deliveredAt = next === "delivered" ? Date.now() : order.delivered_at || null;
 
-    await sql`UPDATE orders SET stage = ${next}, agent_id = ${agentId} WHERE id = ${id}`;
+    await sql`UPDATE orders SET stage = ${next}, agent_id = ${agentId}, delivered_at = ${deliveredAt} WHERE id = ${id}`;
     const [u] = await sql`SELECT * FROM orders WHERE id = ${id}`;
 
     return res.status(200).json({
@@ -37,6 +39,7 @@ export default withApi(
         stage: u.stage,
         placedAt: Number(u.placed_at),
         deliveryFee: u.delivery_fee,
+        deliveredAt: u.delivered_at ? Number(u.delivered_at) : null,
       },
     });
   },

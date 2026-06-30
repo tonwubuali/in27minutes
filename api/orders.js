@@ -68,6 +68,7 @@ function normalize(o) {
     stage: o.stage,
     placedAt: Number(o.placed_at),
     deliveryFee: o.delivery_fee,
+    deliveredAt: o.delivered_at ? Number(o.delivered_at) : null,
   };
 }
 
