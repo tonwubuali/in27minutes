@@ -51,7 +51,7 @@ export default function Checkout({ onBack, onPlaced }) {
       <Card className="p-5">
         <h2 className="text-lg font-extrabold">Checkout</h2>
         <p className="mt-0.5 text-sm text-slate-500">
-          Delivering to <span className="font-semibold text-brand-ink">{neighborhood?.name}, {neighborhood?.city}</span> — fulfilled by your local agent.
+          Delivering to <span className="font-semibold text-brand-ink">{neighborhood?.name}, {neighborhood?.city}</span> — fulfilled by your campus runner.
         </p>
 
         <div className="mt-5 space-y-4">
