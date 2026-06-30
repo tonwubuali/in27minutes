@@ -60,13 +60,13 @@ export const api = {
   // orders
   orders: () => request("/orders"),
   placeOrder: (order) => request("/orders", { method: "POST", body: order }),
-  advanceOrder: (id) => request(`/orders/${id}/advance`, { method: "POST" }),
+  advanceOrder: (id) => request(`/advance?id=${encodeURIComponent(id)}`, { method: "POST" }),
 
   // applications
   applications: () => request("/applications"),
   submitApplication: (app) => request("/applications", { method: "POST", body: app }),
   approveApplication: (id, decision = "approve") =>
-    request(`/applications/${id}/approve`, { method: "POST", body: { decision } }),
+    request(`/approve?id=${encodeURIComponent(id)}`, { method: "POST", body: { decision } }),
 
   // admin
   metrics: () => request("/metrics"),
