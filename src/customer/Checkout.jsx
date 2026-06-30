@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useStore } from "../store.jsx";
 import { formatMoney } from "../data/seed.js";
-import { Button, Card, Field, inputClass } from "../components/ui.jsx";
+import { Button, Card, Field, inputClass, toast } from "../components/ui.jsx";
 import { DELIVERY_FEE } from "./Cart.jsx";
 
 // Checkout collects delivery details, then POSTs a real order to the API. The
@@ -33,6 +33,7 @@ export default function Checkout({ onBack, onPlaced }) {
         deliveryFee: DELIVERY_FEE,
         items: cartItems.map((i) => ({ id: i.id, name: i.name, emoji: i.emoji, price: i.price, qty: i.qty })),
       });
+      toast("Order placed — 27-min countdown started ⏱️", "orange");
       onPlaced(order.id);
     } catch (e) {
       setError(e.message || "Could not place order");
@@ -42,7 +43,7 @@ export default function Checkout({ onBack, onPlaced }) {
   }
 
   return (
-    <div className="mx-auto max-w-xl">
+    <div className="mx-auto max-w-xl animate-fade-up">
       <button onClick={onBack} className="mb-4 text-sm font-semibold text-slate-500 hover:text-brand-ink">
         ← Back to store
       </button>
