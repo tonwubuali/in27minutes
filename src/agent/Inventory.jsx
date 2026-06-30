@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { useStore } from "../store.jsx";
 import { CATEGORIES, formatMoney } from "../data/seed.js";
 import { Badge, Card } from "../components/ui.jsx";
+import ProductArt from "../components/ProductArt.jsx";
 
 // The agent's local stock. Illustrative for the MVP — each agent holds a subset
 // of the catalog locally, which is what makes 27-minute fulfillment possible.
@@ -54,8 +55,8 @@ export default function Inventory({ neighborhood }) {
           const tone = n === 0 ? "gray" : n <= 5 ? "orange" : "green";
           const label = n === 0 ? "Out of stock" : n <= 5 ? `Low · ${n}` : `${n} in stock`;
           return (
-            <div key={p.id} className="flex items-center gap-3 px-4 py-3">
-              <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-cloud text-lg">{p.emoji}</span>
+            <div key={p.id} className="flex items-center gap-3 px-4 py-3 transition hover:bg-brand-cloud/60">
+              <ProductArt product={p} className="h-9 w-9" rounded="rounded-lg" />
               <div className="flex-1">
                 <p className="text-sm font-semibold">{p.name}</p>
                 <p className="text-xs text-slate-400">{p.category} · {formatMoney(p.price)}</p>

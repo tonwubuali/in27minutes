@@ -36,7 +36,7 @@ export default function AgentApp() {
 
   return (
     <div>
-      <Card className="mb-5 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+      <Card className="mb-5 flex flex-col gap-4 p-5 animate-fade-up sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <span className="grid h-12 w-12 place-items-center rounded-full bg-brand-orange/15 text-xl font-extrabold text-brand-orangeDark">
             {(activeAgent?.name || user?.name || "A")[0]}
@@ -44,7 +44,7 @@ export default function AgentApp() {
           <div>
             <p className="text-lg font-extrabold">{activeAgent?.name || user?.name}</p>
             <p className="text-sm text-slate-500">
-              {neighborhood?.name || "Your"} agent
+              {neighborhood?.name || "Your"} runner
               {activeAgent ? ` · ★ ${activeAgent.rating} · ${activeAgent.deliveries} deliveries` : ""}
             </p>
           </div>
