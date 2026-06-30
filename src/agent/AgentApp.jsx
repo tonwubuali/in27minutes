@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useStore } from "../store.jsx";
 import { formatMoney } from "../data/seed.js";
-import { Badge, Card } from "../components/ui.jsx";
+import { Badge, Button, Card, toast } from "../components/ui.jsx";
+import LiveMap from "../components/LiveMap.jsx";
 import OrderQueue from "./OrderQueue.jsx";
 import Inventory from "./Inventory.jsx";
 
@@ -12,7 +13,7 @@ const earningsFor = (o) =>
   (o.deliveryFee || 0) + Math.round(o.items.reduce((n, i) => n + i.price * i.qty, 0) * FULFILLMENT_RATE);
 
 export default function AgentApp() {
-  const { orders, activeAgent, neighborhoods, refreshOrders, user } = useStore();
+  const { orders, activeAgent, neighborhoods, refreshOrders, advanceOrder, user } = useStore();
   const [tab, setTab] = useState("queue");
 
   // Poll so freshly placed customer orders appear without a manual refresh.
@@ -24,6 +25,7 @@ export default function AgentApp() {
   const neighborhood = neighborhoods.find((n) => n.id === activeAgent?.neighborhoodId);
   const liveOrders = useMemo(() => orders.filter((o) => o.stage !== "delivered"), [orders]);
   const doneToday = useMemo(() => orders.filter((o) => o.stage === "delivered"), [orders]);
+  const activeDelivery = liveOrders.find((o) => o.stage === "delivering");
 
   const earnedToday = doneToday.reduce((n, o) => n + earningsFor(o), 0);
   const pendingEarnings = liveOrders.reduce((n, o) => n + earningsFor(o), 0);
@@ -54,6 +56,20 @@ export default function AgentApp() {
           <p className="text-xl font-extrabold text-emerald-600">{formatMoney(earnedToday)}</p>
         </div>
       </Card>
+
+      {activeDelivery && (
+        <Card className="mb-5 overflow-hidden p-0 animate-scale-in">
+          <LiveMap stage="delivering" originLabel={neighborhood?.name || "You"} destinationLabel={(activeDelivery.customerName || "Drop-off").split(" ")[0]} />
+          <div className="flex items-center justify-between gap-3 p-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-brand-orangeDark">Active delivery</p>
+              <p className="font-bold leading-tight">#{activeDelivery.id.replace("ord-", "")} · {activeDelivery.customerName}</p>
+              <p className="text-xs text-slate-500">📍 {activeDelivery.address}</p>
+            </div>
+            <Button onClick={async () => { await advanceOrder(activeDelivery.id); toast("Marked delivered ✓", "green"); }}>Mark delivered</Button>
+          </div>
+        </Card>
+      )}
 
       <div className="mb-5 flex gap-1 rounded-xl bg-brand-ink/5 p-1">
         {tabs.map((t) => (
