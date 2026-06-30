@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useStore } from "./store.jsx";
-import { Logo, Badge, Button } from "./components/ui.jsx";
+import { Logo, Badge, Button, ToastHost } from "./components/ui.jsx";
 import Login from "./auth/Login.jsx";
 import CustomerApp from "./customer/CustomerApp.jsx";
 import AgentApp from "./agent/AgentApp.jsx";
@@ -62,9 +62,11 @@ export default function App() {
         </div>
       }
     >
-      {user.role === "customer" && <CustomerApp />}
-      {user.role === "agent" && <AgentApp />}
-      {user.role === "admin" && <AdminConsole />}
+      <div key={user.role} className="animate-fade-in">
+        {user.role === "customer" && <CustomerApp />}
+        {user.role === "agent" && <AgentApp />}
+        {user.role === "admin" && <AdminConsole />}
+      </div>
     </Shell>
   );
 }
@@ -82,8 +84,9 @@ function Shell({ children, right, onLogoClick }) {
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
       <footer className="mx-auto max-w-6xl px-4 py-10 text-center text-xs text-slate-400">
-        in27minutes · AI-native hyperlocal commerce · MVP
+        in27minutes · launching at MOUAU, Umudike · AI-native hyperlocal commerce
       </footer>
+      <ToastHost />
     </div>
   );
 }
