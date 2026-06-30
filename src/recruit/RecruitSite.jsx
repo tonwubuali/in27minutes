@@ -65,19 +65,19 @@ export default function RecruitSite() {
   return (
     <div className="space-y-10">
       <div className="grid items-center gap-6 lg:grid-cols-2">
-        <div>
-          <Badge tone="orange">Now hiring neighborhood agents</Badge>
+        <div className="animate-fade-up">
+          <Badge tone="orange">● Now hiring MOUAU campus runners</Badge>
           <h1 className="mt-3 text-4xl font-extrabold leading-tight">
-            Run the fastest store <br />in your <span className="text-brand-orange">neighborhood</span>.
+            Earn between classes <br />as a <span className="text-brand-orange">campus runner</span>.
           </h1>
           <p className="mt-3 max-w-md text-slate-500">
-            in27minutes is built on people, not warehouses. As a field agent you own fulfillment
-            for your area — hold local stock, pick orders, and deliver in under 27 minutes. You
-            earn on every order, set your own hours, and grow your patch.
+            in27minutes is built on people, not warehouses. As a runner you own fulfillment for
+            your zone at MOUAU — hold fast-moving stock, pick orders, and deliver across campus in
+            under 27 minutes. Earn on every order and set your own hours around your timetable.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Button onClick={() => document.querySelector("#apply")?.scrollIntoView({ behavior: "smooth" })}>
-              Apply to become an agent
+              Apply to become a runner
             </Button>
             <Button variant="outline" onClick={() => document.querySelector("#calc")?.scrollIntoView({ behavior: "smooth" })}>
               Estimate your earnings
@@ -106,7 +106,7 @@ export default function RecruitSite() {
       </div>
 
       <section>
-        <h2 className="text-center text-2xl font-extrabold">How being an agent works</h2>
+        <h2 className="text-center text-2xl font-extrabold">How being a runner works</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map((s, i) => (
             <Card key={s.title} className="p-5">
@@ -126,7 +126,7 @@ export default function RecruitSite() {
 
       <section id="apply" className="mx-auto max-w-lg">
         <Card className="p-6">
-          <h2 className="text-2xl font-extrabold">Apply to become an agent</h2>
+          <h2 className="text-2xl font-extrabold">Apply to become a runner</h2>
           <p className="mt-1 text-sm text-slate-500">Takes two minutes. No fees, ever.</p>
 
           <form className="mt-5 space-y-4" onSubmit={submit}>
@@ -136,7 +136,7 @@ export default function RecruitSite() {
             <Field label="Phone / WhatsApp">
               <input className={inputClass} value={form.phone} onChange={set("phone")} placeholder="e.g. 0803 000 0000" />
             </Field>
-            <Field label="Which neighborhood will you cover?">
+            <Field label="Which campus zone will you cover?">
               <select className={inputClass} value={nbId} onChange={set("neighborhoodId")}>
                 {neighborhoods.map((n) => (
                   <option key={n.id} value={n.id}>{n.name}, {n.city}</option>
