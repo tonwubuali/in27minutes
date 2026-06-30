@@ -59,8 +59,10 @@ export function StoreProvider({ children }) {
     try {
       const [p, n] = await Promise.all([api.products(), api.neighborhoods()]);
       setProducts(p.products || []);
-      setNeighborhoods(n.neighborhoods || []);
-      setCustomerNeighborhoodId((cur) => cur || n.neighborhoods?.[0]?.id || null);
+      const zones = n.neighborhoods || [];
+      setNeighborhoods(zones);
+      // Reset if the saved zone is stale (e.g. from a previous dataset).
+      setCustomerNeighborhoodId((cur) => (zones.some((z) => z.id === cur) ? cur : zones[0]?.id || null));
     } catch (e) {
       console.error("catalog load failed", e);
     }
