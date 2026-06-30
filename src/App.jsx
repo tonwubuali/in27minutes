@@ -6,6 +6,7 @@ import CustomerApp from "./customer/CustomerApp.jsx";
 import AgentApp from "./agent/AgentApp.jsx";
 import AdminConsole from "./admin/AdminConsole.jsx";
 import RecruitSite from "./recruit/RecruitSite.jsx";
+import Onboarding, { needsOnboarding } from "./onboarding/Onboarding.jsx";
 
 const ROLE_LABEL = {
   customer: "Customer",
@@ -17,6 +18,7 @@ export default function App() {
   const { user, booting, logout } = useStore();
   // Public recruitment view is reachable without logging in.
   const [showRecruit, setShowRecruit] = useState(false);
+  const [onboard, setOnboard] = useState(needsOnboarding());
 
   if (booting) {
     return (
@@ -48,6 +50,8 @@ export default function App() {
   }
 
   return (
+    <>
+    {user.role === "customer" && onboard && <Onboarding onDone={() => setOnboard(false)} />}
     <Shell
       right={
         <div className="flex items-center gap-3">
@@ -68,6 +72,7 @@ export default function App() {
         {user.role === "admin" && <AdminConsole />}
       </div>
     </Shell>
+    </>
   );
 }
 
