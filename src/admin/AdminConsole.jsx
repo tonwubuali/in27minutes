@@ -26,10 +26,10 @@ export default function AdminConsole() {
 
   return (
     <div>
-      <div className="mb-5 flex items-center justify-between">
+      <div className="mb-5 flex items-center justify-between animate-fade-down">
         <div>
           <h1 className="text-2xl font-extrabold">Ops console</h1>
-          <p className="text-sm text-slate-500">Run the agent network across all neighborhoods.</p>
+          <p className="text-sm text-slate-500">Run the campus runner network across MOUAU.</p>
         </div>
       </div>
 
@@ -60,7 +60,7 @@ function Overview({ metrics }) {
   const o = metrics.orders || {};
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="stagger grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label="Revenue (delivered)" value={formatMoney(metrics.revenue)} tone="text-emerald-600" />
         <Stat label="Active orders" value={o.active ?? 0} tone="text-brand-orangeDark" />
         <Stat label="Active agents" value={metrics.activeAgents ?? 0} tone="text-brand-ink" />
