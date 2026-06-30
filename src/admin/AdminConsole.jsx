@@ -55,35 +55,71 @@ export default function AdminConsole() {
   );
 }
 
+const STAGES = [
+  { key: "confirmed", label: "Confirmed" },
+  { key: "assigned", label: "Assigned" },
+  { key: "picking", label: "Picking" },
+  { key: "delivering", label: "Delivering" },
+  { key: "delivered", label: "Delivered" },
+];
+
 function Overview({ metrics }) {
+  const { orders, neighborhoods } = useStore();
   if (!metrics) return <Card className="p-8 text-center text-slate-400">Loading metrics…</Card>;
   const o = metrics.orders || {};
+
+  const zoneRows = (metrics.ordersByNeighborhood || []).map((r) => ({
+    name: neighborhoods.find((n) => n.id === r.neighborhood_id)?.name || r.neighborhood_id?.replace("nb-", "") || "—",
+    c: r.c,
+  }));
+  const zoneMax = Math.max(1, ...zoneRows.map((r) => r.c));
+  const stageCounts = STAGES.map((s) => ({ ...s, c: orders.filter((ord) => ord.stage === s.key).length }));
+  const stageMax = Math.max(1, ...stageCounts.map((s) => s.c));
+
   return (
     <div className="space-y-4">
       <div className="stagger grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Stat label="Revenue (delivered)" value={formatMoney(metrics.revenue)} tone="text-emerald-600" />
-        <Stat label="Active orders" value={o.active ?? 0} tone="text-brand-orangeDark" />
-        <Stat label="Active agents" value={metrics.activeAgents ?? 0} tone="text-brand-ink" />
-        <Stat label="Pending applications" value={metrics.pendingApplications ?? 0} tone="text-blue-600" />
+        <Stat label="Revenue (delivered)" value={formatMoney(metrics.revenue)} tone="text-emerald-600" icon="💸" />
+        <Stat label="Active orders" value={o.active ?? 0} tone="text-brand-orangeDark" icon="📦" />
+        <Stat label="Active runners" value={metrics.activeAgents ?? 0} tone="text-brand-ink" icon="🛵" />
+        <Stat label="Pending applications" value={metrics.pendingApplications ?? 0} tone="text-blue-600" icon="📝" />
       </div>
-      <Card className="p-5">
-        <h3 className="mb-3 text-sm font-bold">Orders by neighborhood</h3>
-        {(metrics.ordersByNeighborhood || []).length === 0 ? (
-          <p className="text-sm text-slate-400">No orders yet.</p>
-        ) : (
-          <div className="space-y-2">
-            {metrics.ordersByNeighborhood.map((row) => (
-              <div key={row.neighborhood_id} className="flex items-center gap-3">
-                <span className="w-32 text-sm text-slate-500">{row.neighborhood_id?.replace("nb-", "")}</span>
-                <div className="h-3 flex-1 overflow-hidden rounded-full bg-brand-cloud">
-                  <div className="h-full rounded-full bg-brand-orange" style={{ width: `${Math.min(100, row.c * 12)}%` }} />
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* Orders by zone — vertical bar chart */}
+        <Card className="p-5">
+          <h3 className="mb-4 text-sm font-bold">Orders by campus zone</h3>
+          {zoneRows.length === 0 ? <p className="text-sm text-slate-400">No orders yet.</p> : (
+            <div className="flex h-44 items-end justify-around gap-3">
+              {zoneRows.map((r) => (
+                <div key={r.name} className="flex flex-1 flex-col items-center gap-2">
+                  <span className="text-sm font-extrabold">{r.c}</span>
+                  <div className="flex w-full max-w-[48px] flex-1 items-end">
+                    <div className="w-full rounded-t-lg bg-gradient-to-t from-brand-orange to-orange-400 transition-all" style={{ height: `${(r.c / zoneMax) * 100}%`, minHeight: 6 }} />
+                  </div>
+                  <span className="text-center text-[11px] leading-tight text-slate-500">{r.name}</span>
                 </div>
-                <span className="w-8 text-right text-sm font-bold">{row.c}</span>
+              ))}
+            </div>
+          )}
+        </Card>
+
+        {/* Order pipeline funnel */}
+        <Card className="p-5">
+          <h3 className="mb-4 text-sm font-bold">Order pipeline</h3>
+          <div className="space-y-2.5">
+            {stageCounts.map((s) => (
+              <div key={s.key} className="flex items-center gap-3">
+                <span className="w-20 text-xs text-slate-500">{s.label}</span>
+                <div className="h-5 flex-1 overflow-hidden rounded-lg bg-brand-cloud">
+                  <div className={`h-full rounded-lg transition-all ${s.key === "delivered" ? "bg-emerald-500" : "bg-brand-ink"}`} style={{ width: `${(s.c / stageMax) * 100}%`, minWidth: s.c ? 8 : 0 }} />
+                </div>
+                <span className="w-6 text-right text-sm font-bold">{s.c}</span>
               </div>
             ))}
           </div>
-        )}
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }
@@ -192,9 +228,10 @@ function Agents() {
   );
 }
 
-function Stat({ label, value, tone }) {
+function Stat({ label, value, tone, icon }) {
   return (
-    <Card className="p-4">
+    <Card hover className="p-4">
+      {icon && <div className="mb-1 text-lg">{icon}</div>}
       <p className="text-xs text-slate-400">{label}</p>
       <p className={`text-2xl font-extrabold ${tone}`}>{value}</p>
     </Card>
