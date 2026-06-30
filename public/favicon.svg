@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="15" fill="#0F1B33"/>
+  <g stroke="#F26419" stroke-width="3.4" stroke-linecap="round">
+    <line x1="9" y1="25" x2="20" y2="25"/>
+    <line x1="7" y1="32" x2="18" y2="32"/>
+    <line x1="10" y1="39" x2="20" y2="39"/>
+  </g>
+  <text x="40" y="33" dominant-baseline="central" text-anchor="middle"
+        font-family="Inter, Segoe UI, sans-serif" font-size="30" font-weight="800" fill="#F26419">27</text>
+</svg>
